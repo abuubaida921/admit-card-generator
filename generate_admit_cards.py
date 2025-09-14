@@ -46,9 +46,9 @@ FACULTY_DEPARTMENTS = {
 }
 
 CARDS_PER_ROW = 1
-CARDS_PER_COL = 6   # 6 admit cards per page
+CARDS_PER_COL = 4   # 4 admit cards per page
 CARD_WIDTH = 100
-CARD_HEIGHT = 40
+CARD_HEIGHT = 55
 
 # === Load Excel ===
 df = pd.read_excel("students.xlsx")
@@ -92,6 +92,15 @@ for _, row in df.iterrows():
     # Draw rectangle for card
     pdf.rect(x, y, CARD_WIDTH, CARD_HEIGHT)
 
+    # Add event and org logos (minimal size, e.g., 15x15mm)
+    event_logo_path = os.path.join(os.path.dirname(__file__), "event_logo.jpg")
+    org_logo_path = os.path.join(os.path.dirname(__file__), "org_logo.jpg")
+    if os.path.exists(event_logo_path):
+        # Horizontally enlarged event logo (e.g., 30x15mm)
+        pdf.image(event_logo_path, x + 2, y + 2, 30, 15)
+    if os.path.exists(org_logo_path):
+        pdf.image(org_logo_path, x + CARD_WIDTH - 17, y + 2, 15, 15)
+
     # Format phone for visible text as well
     visible_phone = str(row.get('Phone Number (WhatsApp preferred)', ''))
     if visible_phone and len(visible_phone) == 10 and not visible_phone.startswith('0'):
@@ -99,7 +108,7 @@ for _, row in df.iterrows():
     elif visible_phone and len(visible_phone) == 11 and not visible_phone.startswith('0'):
         visible_phone = '0' + visible_phone[1:]
 
-    pdf.set_xy(x + 3, y + 3)
+    pdf.set_xy(x + 3, y + 20)
     pdf.multi_cell(
         CARD_WIDTH - 28, 5,
         f"Name: {row['Full Name (as per certificate)']}\n"
@@ -107,7 +116,7 @@ for _, row in df.iterrows():
         f"Faculty: {row['Faculty']}\n"
         f"Phone: {visible_phone}\n"
         f"Email: {row['Email Address (Please double check and submit correct email address)']}\n"
-        f"Roll: {row['Roll No']}",
+        f"Roll/Reg. ID: {row['Roll No']}",
         align='L'
     )
 
@@ -134,8 +143,8 @@ for _, row in df.iterrows():
         img.save(tmp_qr, format="PNG")
         tmp_qr_path = tmp_qr.name
 
-    # Insert QR image (20x20mm) inside the card
-    pdf.image(tmp_qr_path, x + CARD_WIDTH - 25, y + 5, 20, 20)
+    # Insert QR image (20x20mm) at the bottom right of the card
+    pdf.image(tmp_qr_path, x + CARD_WIDTH - 25, y + CARD_HEIGHT - 25, 20, 20)
 
     # Move to next column / row
     count += 1
