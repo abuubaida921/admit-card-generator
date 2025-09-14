@@ -92,8 +92,6 @@ for _, row in df.iterrows():
     # Draw rectangle for card
     pdf.rect(x, y, CARD_WIDTH, CARD_HEIGHT)
 
-    # Write student details (leave space for QR)
-    pdf.set_xy(x + 3, y + 3)
     # Format phone for visible text as well
     visible_phone = str(row.get('Phone Number (WhatsApp preferred)', ''))
     if visible_phone and len(visible_phone) == 10 and not visible_phone.startswith('0'):
@@ -101,6 +99,7 @@ for _, row in df.iterrows():
     elif visible_phone and len(visible_phone) == 11 and not visible_phone.startswith('0'):
         visible_phone = '0' + visible_phone[1:]
 
+    pdf.set_xy(x + 3, y + 3)
     pdf.multi_cell(
         CARD_WIDTH - 28, 5,
         f"Name: {row['Full Name (as per certificate)']}\n"
@@ -112,16 +111,13 @@ for _, row in df.iterrows():
         align='L'
     )
 
-    # === Generate QR code with all student info as JSON ===
+    # === Generate QR code with name, roll, dept, phone as JSON ===
     import tempfile, json
-    # Ensure phone number starts with '0' and is 11 digits
     phone = str(row.get('Phone Number (WhatsApp preferred)', ''))
     if phone and len(phone) == 10 and not phone.startswith('0'):
         phone = '0' + phone
     elif phone and len(phone) == 11 and not phone.startswith('0'):
         phone = '0' + phone[1:]
-    # Optionally, you can add more validation for phone numbers here
-
     student_info = {
         "name": str(row.get('Full Name (as per certificate)', '')),
         "roll": str(row.get('Roll No', '')),
