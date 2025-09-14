@@ -155,7 +155,9 @@ for _, row in df.iterrows():
         img.save(tmp_qr, format="PNG")
         tmp_qr_path = tmp_qr.name
 
-    c.drawImage(tmp_qr_path, x + CARD_WIDTH - 25*mm, y + 6*mm, 20*mm, 20*mm, preserveAspectRatio=True, mask="auto")
+    # Enlarge QR code by 5% (from 20mm to 21mm)
+    qr_size = 21 * mm
+    c.drawImage(tmp_qr_path, x + CARD_WIDTH - qr_size - 4*mm, y + 6*mm, qr_size, qr_size, preserveAspectRatio=True, mask="auto")
     os.remove(tmp_qr_path)
 
     # Next card position
