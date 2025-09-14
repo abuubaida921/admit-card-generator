@@ -1,0 +1,29 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+.env/
+
+# Jupyter / IPython
+.ipynb_checkpoints
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Project specific
+students.xlsx
+Admit_Cards_All.pdf
+*.pkl
+
+# Logs
+*.log
+
+# Backup files
+*.bak
+*.swp
+*.swo
