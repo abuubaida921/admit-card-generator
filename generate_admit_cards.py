@@ -53,7 +53,7 @@ FACULTY_DEPARTMENTS = {
 }
 
 CARDS_PER_ROW = 1
-CARDS_PER_COL = 4   # 4 admit cards per page
+CARDS_PER_COL = 5   # 4 admit cards per page
 CARD_WIDTH = 100 * mm
 CARD_HEIGHT = 50 * mm
 
@@ -89,7 +89,7 @@ if not os.path.exists(FONT_PATH):
 pdfmetrics.registerFont(TTFont("Kalpurush", FONT_PATH))
 
 event_logo_path = os.path.join(os.path.dirname(__file__), "event_logo.jpg")
-org_logo_path = os.path.join(os.path.dirname(__file__), "org_logo.jpg")
+org_logo_path = os.path.join(os.path.dirname(__file__), "org_logo.png")
 
 # === Create PDF ===
 c = canvas.Canvas("Admit_Cards_All.pdf", pagesize=A4)
