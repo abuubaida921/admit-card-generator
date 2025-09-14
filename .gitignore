@@ -20,6 +20,7 @@ Thumbs.db
 students.xlsx
 Admit_Cards_All.pdf
 *.pkl
+~$*.xlsx
 
 # Logs
 *.log
