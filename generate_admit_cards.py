@@ -68,6 +68,8 @@ def get_faculty(dept):
     return "Others"
 
 df["Faculty"] = df["Department"].apply(get_faculty)
+# Now sort by Faculty, Department, and Name
+df = df.sort_values(["Faculty", "Department", "Full Name (as per certificate)"])
 
 # Assign Roll Numbers with gap of 20 after each faculty
 roll_numbers = {}
