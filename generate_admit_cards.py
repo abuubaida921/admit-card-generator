@@ -76,7 +76,7 @@ roll_numbers = {}
 serial = 1
 for faculty, faculty_df in df.groupby("Faculty", sort=False):
     for idx in faculty_df.index:
-        roll_no = f"{BASE_ROLL}{serial:04d}"
+        roll_no = f"{BASE_ROLL}{serial:03d}"
         roll_numbers[idx] = roll_no
         serial += 1
     serial += 20  # gap after each faculty
