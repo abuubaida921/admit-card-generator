@@ -37,8 +37,12 @@ def generate_signature_sheet(df, output_path="Signature_Sheet.pdf"):
     y = header_y - row_height
     c.setFont("Kalpurush", 10)
     for _, row in df.iterrows():
-        c.drawString(x_margin, y, str(row["Roll No"]))
-        c.drawString(x_margin + col_widths[0], y, str(row["Full Name (as per certificate)"]))
+        # Draw box for Roll
+        c.rect(x_margin, y - 2*mm, col_widths[0], row_height - 4*mm)
+        c.drawString(x_margin + 2*mm, y, str(row["Roll No"]))
+        # Draw box for Name
+        c.rect(x_margin + col_widths[0], y - 2*mm, col_widths[1], row_height - 4*mm)
+        c.drawString(x_margin + col_widths[0] + 2*mm, y, str(row["Full Name (as per certificate)"]))
         # Draw signature box
         c.rect(x_margin + col_widths[0] + col_widths[1], y - 2*mm, col_widths[2], row_height - 4*mm)
         y -= row_height
@@ -223,4 +227,3 @@ for _, row in df.iterrows():
 c.save()
 # === Generate Signature Sheet ===
 generate_signature_sheet(df)
-print("✅ Combined Admit Card PDF generated with QR codes (ReportLab version)!")
