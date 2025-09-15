@@ -10,6 +10,51 @@ from reportlab.lib.units import mm
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 
+
+def generate_signature_sheet(df, output_path="Signature_Sheet.pdf"):
+    from reportlab.lib.pagesizes import A4
+    from reportlab.pdfgen import canvas
+    from reportlab.lib.units import mm
+    from reportlab.pdfbase import pdfmetrics
+    from reportlab.pdfbase.ttfonts import TTFont
+
+    FONT_PATH = os.path.join(os.path.dirname(__file__), "kalpurush.ttf")
+    pdfmetrics.registerFont(TTFont("Kalpurush", FONT_PATH))
+    c = canvas.Canvas(output_path, pagesize=A4)
+    page_width, page_height = A4
+
+    x_margin, y_margin = 15 * mm, 20 * mm
+    row_height = 15 * mm
+    col_widths = [40 * mm, 70 * mm, 60 * mm]
+    header_y = page_height - y_margin
+
+    # Draw header
+    c.setFont("Kalpurush", 12)
+    c.drawString(x_margin, header_y, "Roll")
+    c.drawString(x_margin + col_widths[0], header_y, "Name")
+    c.drawString(x_margin + col_widths[0] + col_widths[1], header_y, "Signature")
+
+    y = header_y - row_height
+    c.setFont("Kalpurush", 10)
+    for _, row in df.iterrows():
+        c.drawString(x_margin, y, str(row["Roll No"]))
+        c.drawString(x_margin + col_widths[0], y, str(row["Full Name (as per certificate)"]))
+        # Draw signature box
+        c.rect(x_margin + col_widths[0] + col_widths[1], y - 2*mm, col_widths[2], row_height - 4*mm)
+        y -= row_height
+        if y < 30 * mm:
+            c.showPage()
+            y = header_y - row_height
+            c.setFont("Kalpurush", 10)
+
+    c.save()
+    print(f"✅ Signature sheet generated: {output_path}")
+# === Create PDF ===
+c = canvas.Canvas("Admit_Cards_All.pdf", pagesize=A4)
+# ...existing code...
+c.save()
+print("✅ Combined Admit Card PDF generated with QR codes (ReportLab version)!")
+
 # === CONFIGURATION ===
 BASE_ROLL = 5017010   # Roll number prefix
 FACULTY_DEPARTMENTS = {
@@ -176,4 +221,6 @@ for _, row in df.iterrows():
         x, y = x_margin, page_height - y_margin - CARD_HEIGHT
 
 c.save()
+# === Generate Signature Sheet ===
+generate_signature_sheet(df)
 print("✅ Combined Admit Card PDF generated with QR codes (ReportLab version)!")
